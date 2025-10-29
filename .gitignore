@@ -80,6 +80,9 @@ data/processed/*.xlsx
 *.json
 *.xlsx
 
+# COVID-19 repository clonado (muy pesado)
+data/raw/COVID-19/
+
 # Excepciones (archivos pequeños o de ejemplo)
 !data/raw/.gitkeep
 !data/processed/.gitkeep
