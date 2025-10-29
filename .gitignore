@@ -76,7 +76,7 @@ data/raw/*.xlsx
 data/processed/*.csv
 data/processed/*.json
 data/processed/*.xlsx
-*.csv
+# *.csv
 *.json
 *.xlsx
 
