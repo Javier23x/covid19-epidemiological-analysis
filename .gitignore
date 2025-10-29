@@ -69,7 +69,7 @@ dmypy.json
 # Cython debug symbols
 cython_debug/
 
-# Data files (no subir datasets grandes)
+# Data files
 data/raw/*.csv
 data/raw/*.json
 data/raw/*.xlsx
@@ -80,7 +80,7 @@ data/processed/*.xlsx
 *.json
 *.xlsx
 
-# COVID-19 repository clonado (muy pesado)
+# COVID-19 repository
 data/raw/COVID-19/
 
 # Excepciones (archivos pequeños o de ejemplo)
