@@ -15,36 +15,36 @@ import os
 # Diccionario para homogeneizar variantes de nombres de países
 # Formato: 'Nombre en datos originales': 'Nombre estandarizado'
 COUNTRY_MAPPING = {
-    # Estados Unidos
+    # America
     'US': 'United States',
     'USA': 'United States',
-    
-    # Reino Unido
-    'UK': 'United Kingdom',
-    
-    # Coreas
-    'Korea, South': 'South Korea',
-    'Korea, North': 'North Korea',
     
     # Asia
     'Taiwan*': 'Taiwan',
     'Mainland China': 'China',
     'Burma': 'Myanmar',
     'East Timor': 'Timor-Leste',
+    'Korea, South': 'South Korea',
+    'Korea, North': 'North Korea',
+    'West Bank and Gaza': 'Palestine',
     
     # África
     'Cape Verde': 'Cabo Verde',
     'Congo (Brazzaville)': 'Republic of the Congo',
     'Congo (Kinshasa)': 'Democratic Republic of the Congo',
     'Swaziland': 'Eswatini',
+    'Gambia, The': 'Gambia',
     
     # Europa
     'Czechia': 'Czech Republic',
     'Holy See': 'Vatican City',
     'North Macedonia': 'Macedonia',
-    
-    # Medio Oriente
-    'West Bank and Gaza': 'Palestine',
+    'UK': 'United Kingdom',
+    ' Azerbaijan': 'Azerbaijan',
+    'Macedonia': 'North Macedonia',
+        
+    # Oceanía
+    'Bahamas, The': 'Bahamas',
 }
 
 # ============================================================================
