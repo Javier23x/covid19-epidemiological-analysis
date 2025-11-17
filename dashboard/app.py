@@ -31,7 +31,7 @@ from src.config import (
 # Configuración de la página
 st.set_page_config(
     page_title="COVID-19 Dashboard",
-    page_icon="🦠",
+    page_icon="📊",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -53,7 +53,7 @@ def load_complete_dataset(start_date='2020-01-22', end_date='2021-12-31'):
     Returns:
         DataFrame procesado y limpio con datos de COVID-19
     """
-    with st.spinner('🔄 Cargando datos...'):
+    with st.spinner('Cargando datos...'):
         # Cargar datos usando función centralizada
         df = load_daily_reports(start_date=start_date, end_date=end_date, progress_interval=100)
         
@@ -160,7 +160,7 @@ def calculate_kpis(df):
 
 
 # Título principal
-st.title("🦠 COVID-19 Epidemiological Dashboard")
+st.title("COVID-19 Epidemiological Dashboard")
 st.markdown("**Análisis Global de Tendencias Epidemiológicas | Johns Hopkins University Data**")
 st.markdown("---")
 
@@ -174,8 +174,8 @@ try:
     df_complete = load_complete_dataset(start_date='2020-01-22', end_date='2021-12-31')
     data_loaded = True
 except Exception as e:
-    st.error(f"❌ Error al cargar datos: {e}")
-    st.info("💡 Asegúrate de que los archivos de datos estén en la carpeta correcta.")
+    st.error(f"Error al cargar datos: {e}")
+    st.info("Asegúrate de que los archivos de datos estén en la carpeta correcta.")
     data_loaded = False
 
 
@@ -186,7 +186,7 @@ if data_loaded:
     # SIDEBAR - FILTROS
     # ============================================================================
     
-    st.sidebar.header("🔍 Filtros de Búsqueda")
+    st.sidebar.header("Filtros de Búsqueda")
     
     # Obtener opciones disponibles
     available_continents = get_available_continents(df_complete)
@@ -228,7 +228,7 @@ if data_loaded:
     
     # Información adicional
     st.sidebar.info(f"""
-    � **Datos Disponibles**
+    **Datos Disponibles**
     - Período: {min_date} a {max_date}
     - Registros: {len(df_complete):,}
     - Países: {len(available_countries)}
@@ -244,7 +244,7 @@ if data_loaded:
     
     # Verificar que hay datos después del filtrado
     if len(df_filtered) == 0:
-        st.warning("⚠️ No hay datos disponibles para los filtros seleccionados. Intenta con otros criterios.")
+        st.warning("No hay datos disponibles para los filtros seleccionados. Intenta con otros criterios.")
         st.stop()
     
     # Calcular KPIs
@@ -255,13 +255,13 @@ if data_loaded:
     # KPIs PRINCIPALES
     # ============================================================================
     
-    st.header("📊 Indicadores Principales")
+    st.header("Indicadores Principales")
     
     col1, col2, col3, col4, col5 = st.columns(5)
     
     with col1:
         st.metric(
-            label="🦠 Casos Confirmados",
+            label="Casos Confirmados",
             value=f"{kpis['total_confirmed']:,}",
             delta=f"{kpis['delta_confirmed']:+,}" if kpis['delta_confirmed'] != 0 else None,
             delta_color="inverse"
@@ -269,7 +269,7 @@ if data_loaded:
     
     with col2:
         st.metric(
-            label="🔴 Casos Activos",
+            label="Casos Activos",
             value=f"{kpis['total_active']:,}",
             delta=f"{kpis['delta_active']:+,}" if kpis['delta_active'] != 0 else None,
             delta_color="inverse"
@@ -277,14 +277,14 @@ if data_loaded:
     
     with col3:
         st.metric(
-            label="💚 Recuperados",
+            label="Recuperados",
             value=f"{kpis['total_recovered']:,}",
             delta=None
         )
     
     with col4:
         st.metric(
-            label="💀 Fallecidos",
+            label="Fallecidos",
             value=f"{kpis['total_deaths']:,}",
             delta=f"{kpis['delta_deaths']:+,}" if kpis['delta_deaths'] != 0 else None,
             delta_color="inverse"
@@ -292,7 +292,7 @@ if data_loaded:
     
     with col5:
         st.metric(
-            label="📉 Tasa de Letalidad",
+            label="Tasa de Letalidad",
             value=f"{kpis['fatality_rate']:.2f}%",
             delta=None
         )
@@ -305,14 +305,14 @@ if data_loaded:
     # ============================================================================
     
     tab1, tab2, tab3, tab4 = st.tabs([
-        "📈 Evolución Temporal",
-        "🌍 Comparativa de Países",
-        "� Mapa de Calor",
-        "📊 Análisis Avanzado"
+        "Evolución Temporal",
+        "Comparativa de Países",
+        "Mapa de Calor",
+        "Análisis Avanzado"
     ])
     
     with tab1:
-        st.subheader("📈 Evolución Temporal de Casos")
+        st.subheader("Evolución Temporal de Casos")
         
         # Agregar datos por fecha
         evolution_data = df_filtered.groupby('date').agg({
@@ -367,16 +367,16 @@ if data_loaded:
         # Estadísticas resumidas
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.info(f"📅 **Período analizado:** {len(evolution_data)} días")
+            st.info(f"**Período analizado:** {len(evolution_data)} días")
         with col2:
             peak_date = evolution_data.loc[evolution_data['confirmed'].idxmax(), 'date']
-            st.info(f"📈 **Pico de casos:** {peak_date.strftime('%Y-%m-%d')}")
+            st.info(f"**Pico de casos:** {peak_date.strftime('%Y-%m-%d')}")
         with col3:
             avg_daily = int(evolution_data['confirmed'].diff().mean())
-            st.info(f"📊 **Promedio diario:** {avg_daily:,} casos")
+            st.info(f"**Promedio diario:** {avg_daily:,} casos")
     
     with tab2:
-        st.subheader("🌍 Comparativa entre Países")
+        st.subheader("Comparativa entre Países")
         
         # Top 10 países por casos confirmados
         top_countries = df_filtered.groupby('country_region')['confirmed'].max().nlargest(10).reset_index()
@@ -405,7 +405,7 @@ if data_loaded:
         st.plotly_chart(fig2, use_container_width=True)
         
         # Comparativa de tasas de letalidad
-        st.markdown("### 📊 Tasas de Letalidad por País")
+        st.markdown("### Tasas de Letalidad por País")
         
         latest_by_country = df_filtered[df_filtered['date'] == df_filtered['date'].max()].groupby('country_region').agg({
             'confirmed': 'sum',
@@ -432,7 +432,7 @@ if data_loaded:
         st.plotly_chart(fig2b, use_container_width=True)
     
     with tab3:
-        st.subheader("🔥 Mapa de Calor - Correlaciones")
+        st.subheader("Mapa de Calor - Correlaciones")
         
         # Preparar datos para correlación
         correlation_data = df_filtered.groupby('date').agg({
@@ -462,7 +462,7 @@ if data_loaded:
         st.plotly_chart(fig3, use_container_width=True)
         
         # Análisis de correlaciones
-        st.markdown("### 🔍 Análisis de Correlaciones")
+        st.markdown("### Análisis de Correlaciones")
         
         col1, col2 = st.columns(2)
         
@@ -482,7 +482,7 @@ if data_loaded:
             """)
     
     with tab4:
-        st.subheader("📊 Análisis Avanzado - Tendencias y Crecimiento")
+        st.subheader("Análisis Avanzado - Tendencias y Crecimiento")
         
         # Calcular tasa de crecimiento diaria
         daily_data = df_filtered.groupby('date')['confirmed'].sum().reset_index()
@@ -511,7 +511,7 @@ if data_loaded:
         st.plotly_chart(fig4a, use_container_width=True)
         
         # Tasa de crecimiento
-        st.markdown("### 📈 Tasa de Crecimiento")
+        st.markdown("### Tasa de Crecimiento")
         
         fig4b = go.Figure()
         
@@ -536,7 +536,7 @@ if data_loaded:
         st.plotly_chart(fig4b, use_container_width=True)
         
         # Detección de rebrotes
-        st.markdown("### ⚠️ Detección de Rebrotes")
+        st.markdown("### Detección de Rebrotes")
         
         # Identificar días con crecimiento significativo
         threshold = daily_data['growth_rate'].quantile(0.9)
@@ -553,7 +553,7 @@ if data_loaded:
                 use_container_width=True
             )
         else:
-            st.success("✅ No se detectaron rebrotes significativos en el período seleccionado.")
+            st.success("No se detectaron rebrotes significativos en el período seleccionado.")
 
     
     # ============================================================================
@@ -561,12 +561,12 @@ if data_loaded:
     # ============================================================================
     
     st.markdown("---")
-    st.header("💡 Insights Automáticos")
+    st.header("Insights Automáticos")
     
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        st.subheader("🔝 Top 5 Países Afectados")
+        st.subheader("Top 5 Países Afectados")
         
         top5_countries = df_filtered.groupby('country_region')['confirmed'].max().nlargest(5)
         
@@ -574,19 +574,19 @@ if data_loaded:
             st.write(f"**{i}.** {country}: **{cases:,}** casos")
     
     with col2:
-        st.subheader("📊 Estadísticas Generales")
+        st.subheader("Estadísticas Generales")
         
         total_countries = df_filtered['country_region'].nunique()
         total_days = df_filtered['date'].nunique()
         avg_cases_per_day = int(df_filtered.groupby('date')['confirmed'].sum().mean())
         
-        st.write(f"🌍 **Países analizados:** {total_countries}")
-        st.write(f"📅 **Días analizados:** {total_days}")
-        st.write(f"📈 **Promedio casos/día:** {avg_cases_per_day:,}")
-        st.write(f"💀 **Tasa letalidad promedio:** {kpis['fatality_rate']:.2f}%")
+        st.write(f"**Países analizados:** {total_countries}")
+        st.write(f"**Días analizados:** {total_days}")
+        st.write(f"**Promedio casos/día:** {avg_cases_per_day:,}")
+        st.write(f"**Tasa letalidad promedio:** {kpis['fatality_rate']:.2f}%")
     
     with col3:
-        st.subheader("⚠️ Alertas y Tendencias")
+        st.subheader("Alertas y Tendencias")
         
         # Análisis de tendencia reciente
         recent_days = 7
@@ -598,14 +598,14 @@ if data_loaded:
             growth_pct = ((recent_growth.iloc[-1] - recent_growth.iloc[0]) / recent_growth.iloc[0] * 100)
             
             if growth_pct > 10:
-                st.error(f"🔴 Crecimiento acelerado: +{growth_pct:.1f}% en últimos {recent_days} días")
+                st.error(f"Crecimiento acelerado: +{growth_pct:.1f}% en últimos {recent_days} días")
             elif growth_pct > 5:
-                st.warning(f"🟡 Crecimiento moderado: +{growth_pct:.1f}% en últimos {recent_days} días")
+                st.warning(f"Crecimiento moderado: +{growth_pct:.1f}% en últimos {recent_days} días")
             else:
-                st.success(f"🟢 Crecimiento controlado: +{growth_pct:.1f}% en últimos {recent_days} días")
+                st.success(f"Crecimiento controlado: +{growth_pct:.1f}% en últimos {recent_days} días")
         
         # Países con mayor crecimiento reciente
-        st.write("**📈 Mayor crecimiento:**")
+        st.write("**Mayor crecimiento:**")
         country_growth = df_filtered.groupby('country_region')['confirmed'].agg(['first', 'last'])
         country_growth['growth'] = ((country_growth['last'] - country_growth['first']) / country_growth['first'] * 100).fillna(0)
         top_growth = country_growth.nlargest(3, 'growth')
@@ -627,7 +627,7 @@ if data_loaded:
             <p>Proyecto Semestral - Gestión de Datos 2025-II</p>
             <p>Datos: <a href="https://github.com/CSSEGISandData/COVID-19" target="_blank">Johns Hopkins University CSSE</a></p>
             <p>Universidad Católica de la Santísima Concepción | Facultad de Ingeniería</p>
-            <p>© 2025 | Desarrollado con Streamlit 🚀</p>
+            <p>© 2025 | Desarrollado con Streamlit</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -637,9 +637,9 @@ if data_loaded:
 # ============================================================================
 
 else:
-    st.warning("⚠️ No se pudieron cargar los datos.")
+    st.warning("No se pudieron cargar los datos.")
     st.info("""
-    ### 📝 Instrucciones para cargar los datos:
+    ### Instrucciones para cargar los datos:
     
     1. Asegúrate de tener los datos de JHU CSSE en la carpeta correcta:
        ```
