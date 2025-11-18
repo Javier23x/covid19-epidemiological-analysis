@@ -39,8 +39,8 @@ Taiwan*               ⚠️  Notación política especial
 **¿Por qué importa esto?**
 
 Imagina que estás haciendo un análisis "por continente" y de repente:
-- ¿En qué continente pones un crucero? 🚢
-- ¿La Antártida es un país o un continente? 🧊
+- ¿En qué continente pones un crucero?
+- ¿La Antártida es un país o un continente?
 - ¿Cómo afecta esto a tus gráficos y estadísticas?
 
 **Lo que hicimos:**
@@ -154,7 +154,7 @@ Al analizar 6 meses de datos (Etapa 2), descubrimos que **muchos países nunca r
 
 ---
 
-## 🎯 Desafíos y Cómo los Resolvimos
+## Desafíos y Cómo los Resolvimos
 
 ### Desafío #1: Unir datos de 710 archivos CSV
 
@@ -242,10 +242,10 @@ def load_continent_mapping(df):
 ```
 
 **Ventajas:**
-✅ Funciona offline  
-✅ Rápido (lectura de CSV local)  
-✅ Fácil de actualizar si encontramos nuevos países  
-✅ Reporta automáticamente problemas (países sin mapeo)
+- Funciona offline  
+- Rápido (lectura de CSV local)  
+- Fácil de actualizar si encontramos nuevos países  
+- Reporta automáticamente problemas (países sin mapeo)
 
 ---
 
@@ -286,9 +286,9 @@ def load_complete_dataset(start_date, end_date):
 | Acción | Antes | Después | Mejora |
 |--------|-------|---------|--------|
 | Primera carga | 4.2 seg | 4.2 seg | - |
-| Cambiar continente | 4.2 seg | **0.08 seg** | **98% más rápido** ⚡ |
-| Cambiar país | 4.2 seg | **0.08 seg** | **98% más rápido** ⚡ |
-| Cambiar fecha | 4.2 seg | **0.08 seg** | **98% más rápido** ⚡ |
+| Cambiar continente | 4.2 seg | **0.08 seg** | **98% más rápido** |
+| Cambiar país | 4.2 seg | **0.08 seg** | **98% más rápido** |
+| Cambiar fecha | 4.2 seg | **0.08 seg** | **98% más rápido** |
 
 **Experiencia del usuario:** Dashboard ahora se siente instantáneo después de la carga inicial.
 
@@ -303,7 +303,7 @@ Etapa1.ipynb: 50 líneas de código de limpieza
 Etapa2.ipynb: 80 líneas de código de limpieza (+ carga)  
 Etapa3.ipynb: 150 líneas de código de limpieza (+ carga + mapeo)
 
-TOTAL: ~280 líneas duplicadas 🔴
+TOTAL: ~280 líneas duplicadas
 ```
 
 **Problemas causados:**
@@ -334,16 +334,16 @@ Creamos `src/config.py` con **10 funciones reutilizables**:
 
 | Métrica | Antes | Después | Reducción |
 |---------|-------|---------|-----------|
-| Líneas en Etapa 2 | 130 | 10 | **92%** 📉 |
-| Líneas en Etapa 3 | 200 | 10 | **95%** 📉 |
-| Lugares para arreglar bugs | 3 | 1 | **67%** 📉 |
-| Consistencia | Baja | Alta | ✅ |
+| Líneas en Etapa 2 | 130 | 10 | **92%** |
+| Líneas en Etapa 3 | 200 | 10 | **95%** |
+| Lugares para arreglar bugs | 3 | 1 | **67%** |
+| Consistencia | Baja | Alta | Sí |
 
 **Beneficio adicional:** Ahora podemos añadir tests unitarios a las funciones centralizadas.
 
 ---
 
-## ⚡ Optimizaciones que Implementamos
+## Optimizaciones que Implementamos
 
 ### Optimización #1: De 280 líneas a 3 líneas
 
@@ -391,10 +391,10 @@ df = load_continent_mapping(df)
 | Dashboard | 150 | 3 | **98%** |
 
 **Beneficios adicionales:**
-- ✅ Si hay un bug, se arregla en UN solo lugar
-- ✅ Código más legible y profesional
-- ✅ Fácil de mantener y actualizar
-- ✅ Podemos añadir tests unitarios
+- Si hay un bug, se arregla en UN solo lugar
+- Código más legible y profesional
+- Fácil de mantener y actualizar
+- Podemos añadir tests unitarios
 
 ---
 
@@ -443,8 +443,8 @@ def load_complete_dataset(start_date, end_date):
 | Actualizar gráfico | 4.2 seg | 0.08 seg | **52x más rápido** |
 
 **Experiencia del usuario:**
-- ❌ Antes: Frustración, esperas constantes
-- ✅ Después: Dashboard se siente fluido e instantáneo
+- Antes: Frustración, esperas constantes
+- Después: Dashboard se siente fluido e instantáneo
 
 ---
 
@@ -528,13 +528,13 @@ def load_daily_reports(...):
 ```
 
 **Resultado:** 
-- ✅ Código robusto que funciona con cualquier variante de archivo
-- ✅ No más errores por nombres de columnas inconsistentes
-- ✅ Fácil añadir más normalizaciones si encontramos nuevas variantes
+- Código robusto que funciona con cualquier variante de archivo
+- No más errores por nombres de columnas inconsistentes
+- Fácil añadir más normalizaciones si encontramos nuevas variantes
 
 ---
 
-## 🎨 Decisiones de Diseño Importantes
+## Decisiones de Diseño Importantes
 
 ### Decisión #1: ¿Todo en notebooks o código modular?
 
@@ -560,11 +560,11 @@ Opción B: Código modular
 
 | Aspecto | Opción A (Todo en notebooks) | Opción B (Modular) |
 |---------|----------------------------|-------------------|
-| Facilidad inicial | ✅ Muy fácil | ⚠️ Más setup |
-| Mantenimiento | ❌ Difícil (cambiar en 3 lugares) | ✅ Fácil (cambiar en 1 lugar) |
-| Reutilización | ❌ Copiar/pegar código | ✅ Importar funciones |
-| Profesionalismo | ⚠️ Amateur | ✅ Código de producción |
-| Testing | ❌ Casi imposible | ✅ Fácil añadir tests |
+| Facilidad inicial | Muy fácil | Más setup |
+| Mantenimiento | Difícil (cambiar en 3 lugares) | Fácil (cambiar en 1 lugar) |
+| Reutilización | Copiar/pegar código | Importar funciones |
+| Profesionalismo | Amateur | Código de producción |
+| Testing | Casi imposible | Fácil añadir tests |
 
 **Nuestra decisión:** Opción B (Modular)
 
@@ -684,14 +684,14 @@ st.metric("🦠 Casos Confirmados", ...)
 
 ```
 Pros de los emojis:
-✅ Interfaz visualmente atractiva
-✅ Fácil identificar secciones
-✅ Moderno y amigable
++ Interfaz visualmente atractiva
++ Fácil identificar secciones
++ Moderno y amigable
 
 Contras:
-❌ Menos formal para presentación académica
-❌ Puede distraer del contenido
-❌ No todos los emojis se ven igual en todos los navegadores
+- Menos formal para presentación académica
+- Puede distraer del contenido
+- No todos los emojis se ven igual en todos los navegadores
 ```
 
 **Nuestra decisión:** Eliminar emojis para la versión final
@@ -706,7 +706,7 @@ Contras:
 
 ---
 
-## 📚 Lecciones Aprendidas
+## Lecciones Aprendidas
 
 ### Lección #1: Los datos reales nunca están limpios
 
@@ -714,11 +714,11 @@ Contras:
 > "Los datos de una universidad prestigiosa como Johns Hopkins deben estar perfectos"
 
 **La realidad:**
-- ❌ Nombres de países inconsistentes
-- ❌ Columnas duplicadas
-- ❌ Cambios de formato a lo largo del tiempo
-- ❌ Valores faltantes sin explicación
-- ❌ Entidades que no son países
+- Nombres de países inconsistentes
+- Columnas duplicadas
+- Cambios de formato a lo largo del tiempo
+- Valores faltantes sin explicación
+- Entidades que no son países
 
 **Lo que aprendimos:**
 
@@ -728,10 +728,10 @@ Contras:
 
 3. **Código defensivo:** Escribir funciones que manejen casos inesperados:
    ```python
-   # ❌ Código frágil
+   # Código frágil
    df['confirmed'].sum()  # Falla si hay valores no numéricos
    
-   # ✅ Código robusto
+   # Código robusto
    pd.to_numeric(df['confirmed'], errors='coerce').fillna(0).sum()
    ```
 
@@ -775,12 +775,12 @@ Esfuerzo
 
 **Lo que aprendimos sobre `@st.cache_data`:**
 
-✅ **Cuándo usarlo:**
+**Cuándo usarlo:**
 - Funciones que cargan datos pesados
 - Operaciones costosas que no cambian frecuentemente
 - Procesamiento que siempre da el mismo resultado con los mismos parámetros
 
-❌ **Cuándo NO usarlo:**
+**Cuándo NO usarlo:**
 - Funciones que dependen del tiempo actual
 - Operaciones con efectos secundarios (escribir archivos)
 - Funciones que devuelven objetos que se modificarán
@@ -788,12 +788,12 @@ Esfuerzo
 **Ejemplo real:**
 
 ```python
-# ✅ BIEN: Cargar datos (mismos parámetros = mismos datos)
+# BIEN: Cargar datos (mismos parámetros = mismos datos)
 @st.cache_data
 def load_complete_dataset(start_date, end_date):
     return load_data(start_date, end_date)
 
-# ❌ MAL: Filtrar datos (cambia con interacción del usuario)
+# MAL: Filtrar datos (cambia con interacción del usuario)
 @st.cache_data
 def filter_data(df, continent, countries, dates):
     # Este filtro cambia cada segundo, no debe cachearse
@@ -854,9 +854,9 @@ Optimizar tarde:
 
 | Optimización | Cuándo la hicimos | ¿Fue buena decisión? |
 |--------------|-------------------|---------------------|
-| Modularización | Después de Etapa 1 | ✅ Sí, ahorró mucho tiempo |
-| Caching dashboard | Cuando notamos lentitud | ✅ Sí, problema real |
-| Optimizar tipos de datos | No lo hicimos | ⚠️ Podría mejorar memoria |
+| Modularización | Después de Etapa 1 | Sí, ahorró mucho tiempo |
+| Caching dashboard | Cuando notamos lentitud | Sí, problema real |
+| Optimizar tipos de datos | No lo hicimos | Podría mejorar memoria |
 
 **Regla que aprendimos:**
 > "Optimiza cuando hay un problema real, no cuando imaginas que habrá uno"
@@ -876,11 +876,11 @@ Semana 3: "¿Qué hace esta función? ¿Por qué lo hice así?"
 **Solución:** Comentarios y docstrings claros
 
 ```python
-# ❌ Sin documentación
+# Sin documentación
 def f(d, s, e):
     return d[(d['date'] >= s) & (d['date'] <= e)]
 
-# ✅ Con documentación
+# Con documentación
 def filter_data_by_date_range(df, start_date, end_date):
     """
     Filtra un DataFrame por rango de fechas.
@@ -903,7 +903,7 @@ def filter_data_by_date_range(df, start_date, end_date):
 
 ---
 
-## 🚀 ¿Qué Haríamos Diferente? (Mejoras Futuras)
+## ¿Qué Haríamos Diferente? (Mejoras Futuras)
 
 ### Si tuviéramos más tiempo...
 
@@ -953,9 +953,9 @@ df = pd.read_parquet('data/processed/covid_complete.parquet')
 ```
 
 **Beneficios:**
-- ✅ Carga 10x más rápida
-- ✅ 50% menos espacio en disco
-- ✅ Mantiene tipos de datos automáticamente
+- Carga 10x más rápida
+- 50% menos espacio en disco
+- Mantiene tipos de datos automáticamente
 
 ---
 
@@ -980,11 +980,11 @@ def test_homogenize_country_names():
 
 Ideas que nos gustaría implementar:
 
-- 🗺️ **Mapa geográfico interactivo:** Ver casos por país en mapa mundial
-- 🎬 **Animación temporal:** Ver evolución de la pandemia como video
-- 📊 **Comparador personalizado:** Seleccionar 5 países y comparar métricas
-- 📈 **Predicciones básicas:** Usar modelos simples para proyectar tendencias
-- 📄 **Exportar reportes PDF:** Generar resumen automático del análisis
+- **Mapa geográfico interactivo:** Ver casos por país en mapa mundial
+- **Animación temporal:** Ver evolución de la pandemia como video
+- **Comparador personalizado:** Seleccionar 5 países y comparar métricas
+- **Predicciones básicas:** Usar modelos simples para proyectar tendencias
+- **Exportar reportes PDF:** Generar resumen automático del análisis
 
 ---
 
@@ -993,17 +993,17 @@ Ideas que nos gustaría implementar:
 **Ideas interesantes:**
 
 ```
-🔬 Análisis de olas/picos
+Análisis de olas/picos
 ├── Detectar automáticamente las "olas" de contagio
 ├── Comparar duración e intensidad entre países
 └── Identificar patrones comunes
 
-🌍 Análisis por densidad poblacional
+Análisis por densidad poblacional
 ├── Normalizar casos por población
 ├── Ver si países densos tienen más contagios
 └── Correlación con políticas de cuarentena
 
-📊 Análisis de políticas
+Análisis de políticas
 ├── Comparar países con cuarentena estricta vs laxa
 ├── Medir efectividad de medidas
 └── Timeline de políticas vs casos
@@ -1039,67 +1039,67 @@ streamlit run dashboard/app.py  # Dashboard siempre actualizado
 
 ---
 
-## 📊 Resumen del Proyecto
+## Resumen del Proyecto
 
 ### ¿Qué logramos?
 
 | Métrica | Resultado |
 |---------|-----------|
-| ✅ **Etapas completadas** | 5 de 5 (100%) |
-| 📓 **Notebooks creados** | 3 (Etapa 1, 2, 3) |
-| 📊 **Dashboard funcional** | Sí, con 4 tabs y 5 KPIs |
-| ⚡ **Funciones centralizadas** | 10 funciones reutilizables |
-| 📉 **Reducción de código** | 92-95% en Etapas 2-3 |
-| 🌍 **Países mapeados** | 248+ con continentes |
-| 🚀 **Optimizaciones** | 4 optimizaciones documentadas |
-| 🐛 **Descubrimientos** | 4 hallazgos importantes |
-| 📈 **Commits en Git** | 30+ commits descriptivos |
+| **Etapas completadas** | 5 de 5 (100%) |
+| **Notebooks creados** | 3 (Etapa 1, 2, 3) |
+| **Dashboard funcional** | Sí, con 4 tabs y 5 KPIs |
+| **Funciones centralizadas** | 10 funciones reutilizables |
+| **Reducción de código** | 92-95% en Etapas 2-3 |
+| **Países mapeados** | 248+ con continentes |
+| **Optimizaciones** | 4 optimizaciones documentadas |
+| **Descubrimientos** | 4 hallazgos importantes |
+| **Commits en Git** | 30+ commits descriptivos |
 
 ---
 
 ### Tecnologías que dominamos
 
 **Análisis de Datos:**
-- ✅ Pandas: Manipulación avanzada de datos
-- ✅ NumPy: Operaciones numéricas eficientes
-- ✅ Pandas profiling: Reportes automáticos
+- Pandas: Manipulación avanzada de datos
+- NumPy: Operaciones numéricas eficientes
+- Pandas profiling: Reportes automáticos
 
 **Visualización:**
-- ✅ Plotly: Gráficos interactivos
-- ✅ Matplotlib: Visualizaciones estáticas
-- ✅ Seaborn: Gráficos estadísticos elegantes
+- Plotly: Gráficos interactivos
+- Matplotlib: Visualizaciones estáticas
+- Seaborn: Gráficos estadísticos elegantes
 
 **Desarrollo Web:**
-- ✅ Streamlit: Dashboards interactivos
-- ✅ HTML/CSS: Personalización de interfaz
+- Streamlit: Dashboards interactivos
+- HTML/CSS: Personalización de interfaz
 
 **Herramientas:**
-- ✅ Git: Control de versiones profesional
-- ✅ Jupyter: Notebooks interactivos
-- ✅ VS Code: Desarrollo eficiente
+- Git: Control de versiones profesional
+- Jupyter: Notebooks interactivos
+- VS Code: Desarrollo eficiente
 
 ---
 
 ### Habilidades desarrolladas
 
 **Técnicas:**
-- ✅ Limpieza y transformación de datos reales
-- ✅ Análisis exploratorio de datos (EDA)
-- ✅ Diseño de visualizaciones efectivas
-- ✅ Desarrollo de aplicaciones con datos
-- ✅ Optimización de rendimiento
-- ✅ Modularización y buenas prácticas
+- Limpieza y transformación de datos reales
+- Análisis exploratorio de datos (EDA)
+- Diseño de visualizaciones efectivas
+- Desarrollo de aplicaciones con datos
+- Optimización de rendimiento
+- Modularización y buenas prácticas
 
 **Blandas:**
-- ✅ Resolución de problemas complejos
-- ✅ Documentación técnica clara
-- ✅ Pensamiento crítico sobre datos
-- ✅ Trabajo con datos del mundo real
-- ✅ Gestión de proyecto completo
+- Resolución de problemas complejos
+- Documentación técnica clara
+- Pensamiento crítico sobre datos
+- Trabajo con datos del mundo real
+- Gestión de proyecto completo
 
 ---
 
-## 🎓 Conclusión
+## Conclusión
 
 ### ¿Qué nos llevamos de este proyecto?
 
@@ -1132,11 +1132,11 @@ Desarrollamos la habilidad de:
 **4. Portfolio Real**
 
 Ahora tenemos:
-- ✅ Repositorio Git público con código limpio
-- ✅ Dashboard funcional desplegable
-- ✅ Notebooks bien documentados
-- ✅ README profesional
-- ✅ Documentación de aprendizajes
+- Repositorio Git público con código limpio
+- Dashboard funcional desplegable
+- Notebooks bien documentados
+- README profesional
+- Documentación de aprendizajes
 
 ---
 
@@ -1148,7 +1148,7 @@ Este proyecto nos preparó para trabajar con datos reales en cualquier industria
 
 ---
 
-## 📝 Metadatos del Documento
+## Metadatos del Documento
 
 **Autores:** Javier Pino Herrera, Camilo Campos González  
 **Curso:** Gestión de Datos 2025-II  
