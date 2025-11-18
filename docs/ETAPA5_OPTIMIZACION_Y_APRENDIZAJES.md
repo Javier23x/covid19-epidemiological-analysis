@@ -25,21 +25,21 @@ Este documento es una **reflexión honesta** sobre:
 
 **¿Qué encontramos?**
 
-Cuando empezamos a trabajar con los datos, asumimos que la columna `Country/Region` contenía solo países. **¡Error!** Encontramos:
+Cuando empezamos a trabajar con los datos, asumimos que la columna `Country/Region` contenía solo países. Lo cual termino siendo un **error** ya que encontramos:
 
 ```
-United States          País
-Brazil                 País
-Diamond Princess       ¡Es un crucero!
-MS Zaandam            ¡Otro crucero!
-Antarctica            Es un continente
-Taiwan*               Notación política especial
+United States = País
+Brazil = País
+Diamond Princess = Es un crucero
+MS Zaandam = Otro crucero
+Antarctica = Es un continente
+Taiwan* = Notación política especial
 ```
 
 **¿Por qué importa esto?**
 
-Imagina que estás haciendo un análisis "por continente" y de repente:
-- ¿En qué continente pones un crucero?
+Imaginemos que se está haciendo un análisis "por continente" y de repente:
+- ¿En qué continente debería ir un crucero?
 - ¿La Antártida es un país o un continente?
 - ¿Cómo afecta esto a tus gráficos y estadísticas?
 
@@ -51,7 +51,7 @@ Imagina que estás haciendo un análisis "por continente" y de repente:
    - Territorios → Los asignamos al país al que pertenecen
    - Antarctica → La dejamos como caso especial
 
-**Lección:** Nunca asumas que los datos son lo que parecen. Siempre explora primero.
+**Resultado:** No hay más confusión al analizar datos por país o continente.
 
 ---
 
@@ -79,7 +79,7 @@ El mismo país aparecía con diferentes nombres en diferentes fechas:
 
 **El problema real:**
 
-Si intentas sumar casos de "US" + "USA" + "United States" sin normalizar, Python los ve como **3 países diferentes**. Resultado: números incorrectos y análisis errados.
+Si se intenta sumar casos de "US" + "USA" + "United States" sin normalizar, Python los ve como **3 países diferentes**. Resultado: números incorrectos y análisis errados.
 
 **La solución:**
 
@@ -128,7 +128,7 @@ def consolidate_duplicate_columns(df):
     # Elimina las duplicadas y deja solo una versión limpia
 ```
 
-**Impacto:** El código ahora es robusto y no falla aunque los datos tengan inconsistencias.
+**Resultado:** El código ahora es robusto y no falla aunque los datos tengan inconsistencias.
 
 ---
 
@@ -138,7 +138,7 @@ def consolidate_duplicate_columns(df):
 
 Al analizar 6 meses de datos (Etapa 2), descubrimos que **muchos países nunca reportaron recuperados** - la columna `recovered` estaba en 0 o vacía.
 
-**¿Por qué?**
+**Hipótesis**
 
 - Algunos países no tenían sistemas para rastrear recuperaciones
 - Otros países dejaron de reportar recuperados en cierto punto
@@ -174,7 +174,7 @@ Columnas: Province/State, Country/Region, Last Update, Confirmed, Deaths, Recove
 # Archivo de junio 2020:
 Columnas: FIPS, Admin2, Province_State, Country_Region, Last_Update, Confirmed, Deaths, Recovered, Active
 
-# No coinciden! Diferentes nombres y columnas extra
+# No coinciden, Diferentes nombres y columnas extra
 ```
 
 **La solución paso a paso:**
@@ -199,8 +199,8 @@ df = clean_covid_data(df)
 df = load_continent_mapping(df)
 ```
 
-**Tiempo ahorrado:** ~2 horas de desarrollo por cada nueva etapa del proyecto.
-
+Ahorramos lineas de codigo y tiempo de desarrollo por cada nueva etapa del proyecto.
+   
 ---
 
 ### Desafío #2: Los datos no tienen información de continentes
@@ -249,48 +249,110 @@ def load_continent_mapping(df):
 
 ---
 
-### Desafío #3: El dashboard era muy lento
+### Desafío #3: Problema al cargar los datos desde el repositorio de GitHub
 
-**El problema inicial:**
+**El problema:**
 
-El dashboard cargaba **710 archivos CSV** cada vez que el usuario cambiaba un filtro:
-
-```
-Usuario selecciona "Europa" → Carga 710 archivos (4 segundos)
-Usuario selecciona "Asia" → Carga 710 archivos (4 segundos)
-Usuario cambia fecha → Carga 710 archivos (4 segundos)
-```
-
-**Resultado:** Experiencia frustrante, nadie querría usar el dashboard.
-
-**La solución: Caching**
-
-Usamos el decorador `@st.cache_data` de Streamlit:
+Al inicio del proyecto, intentábamos cargar los datos CSV directamente desde el repositorio de GitHub de JHU CSSE usando URLs:
 
 ```python
-@st.cache_data(show_spinner=False)
-def load_complete_dataset(start_date, end_date):
-    """
-    Los datos se cargan UNA sola vez.
-    Streamlit los guarda en memoria.
-    Cambios de filtros NO recargan los datos.
-    """
-    df = load_daily_reports(start_date, end_date)
-    df = clean_covid_data(df)
-    df = load_continent_mapping(df)
-    return df
+# Intento inicial - cargar directamente desde GitHub
+base_url = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/...'
+for date in dates:
+    url = f"{base_url}/{date.strftime('%m-%d-%Y')}.csv"
+    df = pd.read_csv(url)  # Error 429 después de ~20 archivos
 ```
 
-**Resultados medibles:**
+**¿Qué pasaba?**
 
-| Acción | Antes | Después | Mejora |
-|--------|-------|---------|--------|
-| Primera carga | 4.2 seg | 4.2 seg | - |
-| Cambiar continente | 4.2 seg | **0.08 seg** | **98% más rápido** |
-| Cambiar país | 4.2 seg | **0.08 seg** | **98% más rápido** |
-| Cambiar fecha | 4.2 seg | **0.08 seg** | **98% más rápido** |
+Después de cargar aproximadamente 20-30 archivos, GitHub empezaba a devolver:
 
-**Experiencia del usuario:** Dashboard ahora se siente instantáneo después de la carga inicial.
+```
+HTTPError: 429 Client Error: Too Many Requests
+```
+
+**¿Por qué ocurría?**
+
+GitHub tiene **límites de tasa (rate limits)** para proteger sus servidores:
+- **60 peticiones por hora** para usuarios no autenticados
+- Cargar 710 archivos → 710 peticiones
+- Resultado: Bloqueados después de 20-30 archivos
+
+**Intentos fallidos:**
+
+| Intento | Solución Propuesta | Resultado |
+|---------|-------------------|-----------|
+| #1 | Esperar 1 segundo entre peticiones | Muy lento (12+ minutos), igual bloqueado |
+| #2 | Usar tokens de autenticación | 5000 peticiones/hora, pero igualmente lento |
+| #3 | Cargar solo algunos archivos | No sirve para análisis completo |
+
+**La solución definitiva: Descargar el repositorio localmente**
+
+**Paso 1:** Clonar el repositorio completo
+
+```bash
+cd data/raw/
+git clone https://github.com/CSSEGISandData/COVID-19.git
+```
+
+**Paso 2:** Limpiar archivos innecesarios
+
+El repositorio completo tenía **~2GB** con muchos archivos que no necesitábamos:
+
+```bash
+# Borramos lo que no usamos
+cd COVID-19/
+rm -rf .github/           # Archivos de configuración de GitHub
+rm -rf archived_data/     # Datos antiguos sin formato consistente
+rm -rf who_covid_19_*/    # Datos de la OMS (duplicados)
+rm -rf README.md CONTRIBUTING.md  # Documentación
+```
+
+Resultado: De **2GB → 350MB** (solo los CSV que necesitamos)
+
+**Paso 3:** Crear script de actualización automática
+
+Creamos un script para actualizar los datos cuando sea necesario:
+
+```bash
+#!/bin/bash
+# scripts/update_data.sh
+
+echo "Actualizando datos de COVID-19..."
+cd data/raw/COVID-19/
+git pull origin master
+echo "Datos actualizados exitosamente"
+```
+
+**Ventajas de esta solución:**
+
+| Aspecto | Cargar desde GitHub | Repositorio Local |
+|---------|-------------------|-------------------|
+| Velocidad | 12+ minutos (con límites) | 4 segundos |
+| Confiabilidad | Error 429 frecuente | 100% confiable |
+| Funciona offline | No | Sí |
+| Actualización | Automática | Manual (pero con script) |
+| Espacio en disco | 0 MB | 350 MB |
+
+**Resultado:**
+
+```python
+# Código final - simple y rápido
+DATA_DIR = '../data/raw/COVID-19/csse_covid_19_data/csse_covid_19_daily_reports/'
+for date in dates:
+    filepath = os.path.join(DATA_DIR, f"{date.strftime('%m-%d-%Y')}.csv")
+    df = pd.read_csv(filepath) 
+```
+
+**Tiempo de carga:** De 12+ minutos (con errores) → **4 segundos** (sin errores)
+
+**Bonus:** Si necesitamos datos actualizados, solo ejecutamos:
+
+```bash
+bash scripts/update_data.sh
+```
+
+Y tenemos los datos más recientes en segundos.
 
 ---
 
@@ -492,45 +554,8 @@ def clean_covid_data(df, verbose=True):
 
 ---
 
-### Optimización #4: Normalización temprana de columnas
+### Optimización #4: 
 
-**Qué optimizamos:** Detección de columnas en archivos inconsistentes
-
-**El problema:**
-
-```python
-# Algunos archivos tienen:
-'Province/State', 'Country/Region'
-
-# Otros tienen:
-'Province_State', 'Country_Region'
-
-# Código fallaba al buscar columnas
-```
-
-**La solución:**
-
-```python
-def load_daily_reports(...):
-    for date in dates:
-        df = pd.read_csv(filepath)
-        
-        # Normalizar INMEDIATAMENTE después de cargar
-        df.columns = df.columns.str.strip()
-        
-        if 'Province/State' in df.columns:
-            df.rename(columns={'Province/State': 'Province_State'}, inplace=True)
-        if 'Country/Region' in df.columns:
-            df.rename(columns={'Country/Region': 'Country_Region'}, inplace=True)
-        
-        # Ahora todos los archivos tienen los mismos nombres
-        dfs.append(df)
-```
-
-**Resultado:** 
-- Código robusto que funciona con cualquier variante de archivo
-- No más errores por nombres de columnas inconsistentes
-- Fácil añadir más normalizaciones si encontramos nuevas variantes
 
 ---
 
@@ -610,7 +635,6 @@ Opción B: Mantener Etapa 1 paso a paso
 **Beneficio:** 
 - Etapa 1 sirve como **documentación viva** de lo que hace `clean_covid_data()`
 - Las demás etapas son **código productivo y conciso**
-- Balance entre educación y eficiencia
 
 ---
 
@@ -665,44 +689,6 @@ Total de archivos a cargar: 710
 ```
 
 Usuario siempre sabe que el programa está funcionando.
-
----
-
-### Decisión #4: ¿Qué hacer con los emojis en el dashboard?
-
-**Contexto inicial:**
-
-El dashboard tenía emojis para hacer la interfaz más amigable:
-
-```python
-st.title("🦠 COVID-19 Dashboard")
-st.sidebar.header("🔍 Filtros")
-st.metric("🦠 Casos Confirmados", ...)
-```
-
-**El dilema:**
-
-```
-Pros de los emojis:
-+ Interfaz visualmente atractiva
-+ Fácil identificar secciones
-+ Moderno y amigable
-
-Contras:
-- Menos formal para presentación académica
-- Puede distraer del contenido
-- No todos los emojis se ven igual en todos los navegadores
-```
-
-**Nuestra decisión:** Eliminar emojis para la versión final
-
-**Por qué:**
-- Este es un **proyecto académico profesional**
-- Se presentará a profesores y compañeros
-- Preferimos que se enfoque en el análisis, no en decoración
-- Mejor para incluir en portafolio profesional
-
-**Compromiso:** El código con emojis está en el historial de Git, podemos recuperarlo si queremos una versión más informal.
 
 ---
 
@@ -843,7 +829,7 @@ Optimizar temprano:
 + Código eficiente desde el inicio
 - Puede ser optimización prematura
 - Gastas tiempo que tal vez no necesitas
-
+              
 Optimizar tarde:
 + Implementas rápido
 + Solo optimizas lo que realmente necesita
