@@ -1,8 +1,8 @@
-# 📓 Notebooks del Proyecto
+# Notebooks del Proyecto
 
 Esta carpeta contiene los notebooks de Jupyter que implementan las diferentes etapas del análisis.
 
-## 📋 Notebooks
+## Notebooks
 
 ### 01_limpieza_datos.ipynb
 **Objetivo:** Comprender la estructura del dataset y generar una base consolidada y limpia.
@@ -77,7 +77,7 @@ Esta carpeta contiene los notebooks de Jupyter que implementan las diferentes et
 
 ---
 
-## 🚀 Cómo Ejecutar
+## Cómo Ejecutar
 
 1. **Activar entorno virtual:**
    ```bash
@@ -101,7 +101,7 @@ Esta carpeta contiene los notebooks de Jupyter que implementan las diferentes et
    - Después `03_visualizaciones.ipynb`
    - Finalmente `04_optimizacion.ipynb`
 
-## 📝 Convenciones
+## Convenciones
 
 - **Imports al inicio:** Todas las importaciones al comienzo
 - **Comentarios:** Explicar secciones complejas
@@ -109,7 +109,7 @@ Esta carpeta contiene los notebooks de Jupyter que implementan las diferentes et
 - **Outputs visibles:** Mantener outputs de gráficos
 - **Código limpio:** Seguir PEP 8
 
-## 🔍 Estructura Sugerida de Notebooks
+## Estructura Sugerida de Notebooks
 
 ```python
 # 1. Imports
@@ -144,7 +144,7 @@ df.describe()
 df_clean.to_csv('../data/processed/archivo_limpio.csv', index=False)
 ```
 
-## 💡 Tips
+## Tips
 
 - **Ejecutar celda por celda:** No ejecutar todo de una vez inicialmente
 - **Guardar frecuentemente:** Jupyter puede fallar
@@ -152,7 +152,7 @@ df_clean.to_csv('../data/processed/archivo_limpio.csv', index=False)
 - **Clear outputs:** Limpiar outputs antes de commit (opcional)
 - **Documentar decisiones:** Explicar por qué haces algo
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Error: Module not found
 ```bash
@@ -175,7 +175,7 @@ pip install <nombre-paquete>
 df_sample = df.sample(n=10000, random_state=42)
 ```
 
-## 📚 Recursos Útiles
+## Recursos Útiles
 
 - [Jupyter Documentation](https://jupyter-notebook.readthedocs.io/)
 - [Pandas Cheat Sheet](https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf)

@@ -1,5 +1,4 @@
-````markdown
-# 🦠 COVID-19 Dashboard Interactivo
+# COVID-19 Dashboard Interactivo
 
 Dashboard interactivo completo para la exploración y análisis de datos epidemiológicos de COVID-19.
 
@@ -8,49 +7,49 @@ Universidad Católica de la Santísima Concepción
 
 ---
 
-## 📊 Características Principales
+## Características Principales
 
-### 🔍 Filtros Dinámicos
+### Filtros Dinámicos
 - **Selector de Continente:** Filtra datos por continente o visualiza todos
 - **Selector Múltiple de Países:** Selecciona uno o varios países para análisis comparativo
 - **Rango de Fechas:** Personaliza el período de análisis con selector de fechas
 - **Filtrado en Tiempo Real:** Todas las visualizaciones se actualizan automáticamente
 
-### 📈 Indicadores Clave (KPIs)
+### Indicadores Clave (KPIs)
 - **Casos Confirmados:** Total acumulado con variación diaria
 - **Casos Activos:** Casos actuales en tratamiento con tendencia
 - **Recuperados:** Total de casos recuperados
 - **Fallecidos:** Total de fallecimientos con variación diaria
 - **Tasa de Letalidad:** Porcentaje calculado automáticamente
 
-### 🎨 Visualizaciones Interactivas (4 Tabs)
+### Visualizaciones Interactivas (4 Tabs)
 
-#### 1️⃣ Evolución Temporal
+#### 1. Evolución Temporal
 - Gráfico de líneas múltiples con casos confirmados, activos y fallecidos
 - Análisis de series temporales con Plotly
 - Detección automática del pico de casos
 - Cálculo de promedios diarios
 - Tooltips interactivos con información detallada
 
-#### 2️⃣ Comparativa de Países
+#### 2. Comparativa de Países
 - **Top 10 Países por Casos Confirmados:** Gráfico de barras horizontales
 - **Top 10 Países por Tasa de Letalidad:** Análisis estadístico (>1,000 casos)
 - Visualización con escalas de colores
 - Valores formateados con separadores de miles
 
-#### 3️⃣ Mapa de Calor de Correlaciones
+#### 3. Mapa de Calor de Correlaciones
 - Matriz de correlación entre variables clave
 - Análisis de relaciones entre confirmados-fallecidos
 - Análisis de relaciones entre confirmados-activos
 - Visualización intuitiva con escala de colores
 
-#### 4️⃣ Análisis Avanzado
+#### 4. Análisis Avanzado
 - **Nuevos Casos Diarios:** Gráfico de barras
 - **Tasa de Crecimiento:** Gráfico de líneas con porcentaje diario
 - **Detección de Rebrotes:** Algoritmo automático (percentil 90)
 - **Tabla de Eventos Significativos:** Últimos 5 días con mayor crecimiento
 
-### 💡 Insights Automáticos
+### Insights Automáticos
 
 - **Top 5 Países Afectados:** Ranking actualizado dinámicamente
 - **Estadísticas Generales:**
@@ -59,14 +58,14 @@ Universidad Católica de la Santísima Concepción
   - Promedio de casos por día
   - Tasa de letalidad promedio
 - **Alertas de Tendencias:**
-  - 🟢 Crecimiento controlado (<5%)
-  - 🟡 Crecimiento moderado (5-10%)
-  - 🔴 Crecimiento acelerado (>10%)
+  - Crecimiento controlado (<5%)
+  - Crecimiento moderado (5-10%)
+  - Crecimiento acelerado (>10%)
 - **Países con Mayor Crecimiento Reciente:** Top 3 últimos 7 días
 
 ---
 
-## 🚀 Instalación y Uso
+## Instalación y Uso
 
 ### Requisitos Previos
 
@@ -112,7 +111,7 @@ El dashboard se abrirá automáticamente en tu navegador en:
 
 ---
 
-## 🎯 Guía de Uso
+## Guía de Uso
 
 ### 1. Selección de Filtros (Sidebar)
 
@@ -165,7 +164,7 @@ Revisa la sección **"Insights Automáticos"** al final:
 
 ---
 
-## 🛠️ Estructura Técnica
+## Estructura Técnica
 
 ```
 dashboard/
@@ -210,7 +209,7 @@ Del módulo `src/config.py`:
 
 ---
 
-## ⚡ Optimizaciones Implementadas
+## Optimizaciones Implementadas
 
 ### 1. Caché de Datos
 ```python
@@ -237,9 +236,9 @@ def load_complete_dataset(start_date, end_date):
 
 ---
 
-## 🐛 Solución de Problemas
+## Solución de Problemas
 
-### ❌ El dashboard no carga los datos
+### Error: El dashboard no carga los datos
 
 **Problema:** Error al cargar archivos CSV
 
@@ -256,7 +255,7 @@ def load_complete_dataset(start_date, end_date):
 
 3. Verifica permisos de lectura en la carpeta
 
-### ❌ "Module not found: src.config"
+### Error: "Module not found: src.config"
 
 **Problema:** No encuentra el módulo personalizado
 
@@ -265,7 +264,7 @@ def load_complete_dataset(start_date, end_date):
 2. Verifica que `src/config.py` existe
 3. Asegúrate de usar el entorno virtual correcto
 
-### ❌ Streamlit no se encuentra
+### Error: Streamlit no se encuentra
 
 **Problema:** `streamlit: command not found`
 
@@ -280,7 +279,7 @@ def load_complete_dataset(start_date, end_date):
    pip install streamlit
    ```
 
-### ❌ Error de memoria
+### Error: Error de memoria
 
 **Problema:** El sistema se queda sin memoria
 
@@ -289,7 +288,7 @@ def load_complete_dataset(start_date, end_date):
 2. Filtra por continente o país específico
 3. Cierra otras aplicaciones
 
-### ❌ Gráficos no se actualizan
+### Error: Gráficos no se actualizan
 
 **Problema:** Los filtros no afectan las visualizaciones
 
@@ -298,7 +297,7 @@ def load_complete_dataset(start_date, end_date):
 2. Limpia el caché: menú ≡ → "Clear cache"
 3. Reinicia el servidor de Streamlit
 
-### ❌ Dashboard muy lento
+### Error: Dashboard muy lento
 
 **Problema:** Respuesta lenta al cambiar filtros
 
@@ -309,7 +308,7 @@ def load_complete_dataset(start_date, end_date):
 
 ---
 
-## 📊 Datos y Fuentes
+## Datos y Fuentes
 
 ### Fuente de Datos
 - **Proveedor:** Johns Hopkins University CSSE
@@ -334,7 +333,7 @@ def load_complete_dataset(start_date, end_date):
 
 ---
 
-## 📚 Tecnologías Utilizadas
+## Tecnologías Utilizadas
 
 | Tecnología | Versión | Propósito |
 |-----------|---------|-----------|
@@ -351,7 +350,7 @@ def load_complete_dataset(start_date, end_date):
 
 ---
 
-## 🎓 Créditos y Licencia
+## Créditos y Licencia
 
 ### Desarrollado por
 **Proyecto Semestral - Gestión de Datos 2025-II**
@@ -370,7 +369,7 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](../LICENSE) 
 
 ---
 
-## 📞 Soporte
+## Soporte
 
 Si encuentras problemas o tienes sugerencias:
 
@@ -381,7 +380,7 @@ Si encuentras problemas o tienes sugerencias:
 
 ---
 
-## 🚀 Próximas Mejoras (Futuro)
+## Próximas Mejoras (Futuro)
 
 - [ ] Mapa geográfico interactivo con Plotly Mapbox
 - [ ] Exportación de gráficos a PNG/PDF
@@ -393,6 +392,5 @@ Si encuentras problemas o tienes sugerencias:
 
 ---
 
-**¡Gracias por usar el COVID-19 Dashboard! 🦠📊**
+**¡Gracias por usar el COVID-19 Dashboard! **
 
-````
