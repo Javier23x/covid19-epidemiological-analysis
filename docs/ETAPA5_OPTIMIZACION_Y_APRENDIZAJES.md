@@ -5,15 +5,15 @@
 
 ---
 
-## 🎯 ¿De qué trata este documento?
+## ¿De qué trata este documento?
 
 Durante el desarrollo de este proyecto, no solo procesamos datos: **descubrimos problemas reales**, **tomamos decisiones importantes** y **aprendimos a trabajar con datos del mundo real**.
 
 Este documento es una **reflexión honesta** sobre:
-- 💡 Qué descubrimos que nos sorprendió
-- 🎯 Qué problemas enfrentamos y cómo los resolvimos
-- ⚡ Cómo hicimos el código más eficiente
-- 📚 Qué lecciones nos llevamos para futuros proyectos
+- Qué descubrimos que nos sorprendió
+- Qué problemas enfrentamos y cómo los resolvimos
+- Cómo hicimos el código más eficiente
+- Qué lecciones nos llevamos para futuros proyectos
 
 > **Nota:** La Etapa 5 es **transversal** - no es un notebook adicional, sino una documentación de todo lo que aprendimos mientras trabajábamos en las etapas 1-4.
 
@@ -28,12 +28,12 @@ Este documento es una **reflexión honesta** sobre:
 Cuando empezamos a trabajar con los datos, asumimos que la columna `Country/Region` contenía solo países. **¡Error!** Encontramos:
 
 ```
-United States          ✅ País
-Brazil                 ✅ País
-Diamond Princess       ❌ ¡Es un crucero!
-MS Zaandam            ❌ ¡Otro crucero!
-Antarctica            ❌ Es un continente
-Taiwan*               ⚠️  Notación política especial
+United States          País
+Brazil                 País
+Diamond Princess       ¡Es un crucero!
+MS Zaandam            ¡Otro crucero!
+Antarctica            Es un continente
+Taiwan*               Notación política especial
 ```
 
 **¿Por qué importa esto?**
@@ -174,7 +174,7 @@ Columnas: Province/State, Country/Region, Last Update, Confirmed, Deaths, Recove
 # Archivo de junio 2020:
 Columnas: FIPS, Admin2, Province_State, Country_Region, Last_Update, Confirmed, Deaths, Recovered, Active
 
-# ❌ ¡No coinciden! Diferentes nombres y columnas extra
+# No coinciden! Diferentes nombres y columnas extra
 ```
 
 **La solución paso a paso:**
@@ -256,9 +256,9 @@ def load_continent_mapping(df):
 El dashboard cargaba **710 archivos CSV** cada vez que el usuario cambiaba un filtro:
 
 ```
-Usuario selecciona "Europa" → Carga 710 archivos (4 segundos) ⏳
-Usuario selecciona "Asia" → Carga 710 archivos (4 segundos) ⏳
-Usuario cambia fecha → Carga 710 archivos (4 segundos) ⏳
+Usuario selecciona "Europa" → Carga 710 archivos (4 segundos)
+Usuario selecciona "Asia" → Carga 710 archivos (4 segundos)
+Usuario cambia fecha → Carga 710 archivos (4 segundos)
 ```
 
 **Resultado:** Experiencia frustrante, nadie querría usar el dashboard.
@@ -411,7 +411,7 @@ def load_data():
     # ... procesamiento ...
     return df
 
-# ❌ Se ejecuta cada vez que el usuario interactúa:
+# Se ejecuta cada vez que el usuario interactúa:
 # - Cambiar filtro: 4 seg de espera
 # - Cambiar país: 4 seg de espera  
 # - Cambiar fecha: 4 seg de espera
@@ -428,8 +428,8 @@ def load_complete_dataset(start_date, end_date):
     df = load_continent_mapping(df)
     return df
 
-# ✅ Primera vez: 4 seg
-# ✅ Después: 0.08 seg (50x más rápido)
+# Primera vez: 4 seg
+# Después: 0.08 seg (50x más rápido)
 ```
 
 **Mediciones reales:**
@@ -625,17 +625,17 @@ Cargar 710 archivos puede tomar minutos. Sin feedback, el usuario piensa que el 
 ```python
 # Opción A: No mostrar nada
 for file in files:
-    load(file)  # ❌ Usuario no sabe si funciona
+    load(file)  # Usuario no sabe si funciona
 
 # Opción B: Mensaje por archivo
 for file in files:
-    print(f"Cargando {file}")  # ❌ 710 mensajes, spam
+    print(f"Cargando {file}")  # 710 mensajes, spam
 
 # Opción C: Progreso cada N archivos
 for i, file in enumerate(files):
     load(file)
     if i % 50 == 0:
-        print(f"Cargados {i}/{total}")  # ✅ Informativo sin spam
+        print(f"Cargados {i}/{total}")  # Informativo sin spam
 ```
 
 **Nuestra decisión:** Opción C con parámetro configurable
@@ -1032,10 +1032,10 @@ streamlit run dashboard/app.py  # Dashboard siempre actualizado
 
 **Lo que podríamos añadir:**
 
-- 📝 Jupyter Book con todo el análisis
-- 🎥 Video explicativo de 5 minutos
+- Jupyter Book con todo el análisis
+- Video explicativo de 5 minutos
 - �️ Infografía resumen del proyecto
-- 📊 Poster científico para presentaciones
+- Poster científico para presentaciones
 
 ---
 
