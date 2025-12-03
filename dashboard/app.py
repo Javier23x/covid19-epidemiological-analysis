@@ -365,195 +365,227 @@ if data_loaded:
         st.plotly_chart(fig1, use_container_width=True)
         
         # Estadísticas resumidas
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.info(f"**Período analizado:** {len(evolution_data)} días")
-        with col2:
-            peak_date = evolution_data.loc[evolution_data['confirmed'].idxmax(), 'date']
-            st.info(f"**Pico de casos:** {peak_date.strftime('%Y-%m-%d')}")
-        with col3:
-            avg_daily = int(evolution_data['confirmed'].diff().mean())
-            st.info(f"**Promedio diario:** {avg_daily:,} casos")
+        if len(evolution_data) > 0:
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.info(f"**Período analizado:** {len(evolution_data)} días")
+            with col2:
+                if not evolution_data['confirmed'].isna().all() and len(evolution_data) > 0:
+                    peak_date = evolution_data.loc[evolution_data['confirmed'].idxmax(), 'date']
+                    st.info(f"**Pico de casos:** {peak_date.strftime('%Y-%m-%d')}")
+                else:
+                    st.info("**Pico de casos:** N/A")
+            with col3:
+                if len(evolution_data) > 1 and not evolution_data['confirmed'].isna().all():
+                    avg_daily = int(evolution_data['confirmed'].diff().mean())
+                    st.info(f"**Promedio diario:** {avg_daily:,} casos")
+                else:
+                    st.info("**Promedio diario:** N/A")
     
     with tab2:
         st.subheader("Comparativa entre Países")
         
         # Top 10 países por casos confirmados
-        top_countries = df_filtered.groupby('country_region')['confirmed'].max().nlargest(10).reset_index()
+        if len(df_filtered) > 0:
+            top_countries = df_filtered.groupby('country_region')['confirmed'].max().nlargest(10).reset_index()
+        else:
+            st.warning("No hay datos disponibles para los filtros seleccionados.")
+            top_countries = pd.DataFrame(columns=['country_region', 'confirmed'])
         
         # Gráfico de barras horizontales
-        fig2 = px.bar(
-            top_countries,
-            x='confirmed',
-            y='country_region',
-            orientation='h',
-            title='Top 10 Países con Más Casos Confirmados',
-            labels={'confirmed': 'Casos Confirmados', 'country_region': 'País'},
-            color='confirmed',
-            color_continuous_scale='Reds',
-            text='confirmed'
-        )
-        
-        fig2.update_traces(texttemplate='%{text:,}', textposition='outside')
-        fig2.update_layout(
-            height=500,
-            showlegend=False,
-            yaxis={'categoryorder':'total ascending'},
-            template='plotly_white'
-        )
-        
-        st.plotly_chart(fig2, use_container_width=True)
+        if len(top_countries) > 0:
+            fig2 = px.bar(
+                top_countries,
+                x='confirmed',
+                y='country_region',
+                orientation='h',
+                title='Top 10 Países con Más Casos Confirmados',
+                labels={'confirmed': 'Casos Confirmados', 'country_region': 'País'},
+                color='confirmed',
+                color_continuous_scale='Reds',
+                text='confirmed'
+            )
+            
+            fig2.update_traces(texttemplate='%{text:,}', textposition='outside')
+            fig2.update_layout(
+                height=500,
+                showlegend=False,
+                yaxis={'categoryorder':'total ascending'},
+                template='plotly_white'
+            )
+            
+            st.plotly_chart(fig2, use_container_width=True)
+        else:
+            st.info("No hay suficientes datos para mostrar el gráfico.")
         
         # Comparativa de tasas de letalidad
         st.markdown("### Tasas de Letalidad por País")
         
-        latest_by_country = df_filtered[df_filtered['date'] == df_filtered['date'].max()].groupby('country_region').agg({
-            'confirmed': 'sum',
-            'deaths': 'sum'
-        }).reset_index()
+        if len(df_filtered) > 0 and df_filtered['date'].notna().any():
+            latest_by_country = df_filtered[df_filtered['date'] == df_filtered['date'].max()].groupby('country_region').agg({
+                'confirmed': 'sum',
+                'deaths': 'sum'
+            }).reset_index()
+            
+            latest_by_country['fatality_rate'] = (latest_by_country['deaths'] / latest_by_country['confirmed'] * 100).round(2)
+            latest_by_country = latest_by_country[latest_by_country['confirmed'] > 1000].nlargest(10, 'fatality_rate')
+        else:
+            latest_by_country = pd.DataFrame(columns=['country_region', 'confirmed', 'deaths', 'fatality_rate'])
         
-        latest_by_country['fatality_rate'] = (latest_by_country['deaths'] / latest_by_country['confirmed'] * 100).round(2)
-        latest_by_country = latest_by_country[latest_by_country['confirmed'] > 1000].nlargest(10, 'fatality_rate')
-        
-        fig2b = px.bar(
-            latest_by_country,
-            x='country_region',
-            y='fatality_rate',
-            title='Top 10 Países con Mayor Tasa de Letalidad (mínimo 1,000 casos)',
-            labels={'fatality_rate': 'Tasa de Letalidad (%)', 'country_region': 'País'},
-            color='fatality_rate',
-            color_continuous_scale='Oranges',
-            text='fatality_rate'
-        )
-        
-        fig2b.update_traces(texttemplate='%{text:.2f}%', textposition='outside')
-        fig2b.update_layout(height=400, showlegend=False, template='plotly_white')
-        
-        st.plotly_chart(fig2b, use_container_width=True)
+        if len(latest_by_country) > 0:
+            fig2b = px.bar(
+                latest_by_country,
+                x='country_region',
+                y='fatality_rate',
+                title='Top 10 Países con Mayor Tasa de Letalidad (mínimo 1,000 casos)',
+                labels={'fatality_rate': 'Tasa de Letalidad (%)', 'country_region': 'País'},
+                color='fatality_rate',
+                color_continuous_scale='Oranges',
+                text='fatality_rate'
+            )
+            
+            fig2b.update_traces(texttemplate='%{text:.2f}%', textposition='outside')
+            fig2b.update_layout(height=400, showlegend=False, template='plotly_white')
+            
+            st.plotly_chart(fig2b, use_container_width=True)
+        else:
+            st.info("No hay suficientes datos para mostrar las tasas de letalidad.")
     
     with tab3:
         st.subheader("Mapa de Calor - Correlaciones")
         
-        # Preparar datos para correlación
-        correlation_data = df_filtered.groupby('date').agg({
-            'confirmed': 'sum',
-            'deaths': 'sum',
-            'recovered': 'sum',
-            'active_cases': 'sum'
-        })
-        
-        # Calcular matriz de correlación
-        corr_matrix = correlation_data.corr()
-        
-        # Crear heatmap
-        fig3 = px.imshow(
-            corr_matrix,
-            labels=dict(color="Correlación"),
-            x=['Confirmados', 'Fallecidos', 'Recuperados', 'Activos'],
-            y=['Confirmados', 'Fallecidos', 'Recuperados', 'Activos'],
-            color_continuous_scale='RdBu_r',
-            aspect='auto',
-            title='Matriz de Correlación entre Variables',
-            text_auto='.2f'
-        )
-        
-        fig3.update_layout(height=500, template='plotly_white')
-        
-        st.plotly_chart(fig3, use_container_width=True)
-        
-        # Análisis de correlaciones
-        st.markdown("### Análisis de Correlaciones")
-        
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            st.success(f"""
-            **Correlación Confirmados-Fallecidos:** {corr_matrix.loc['confirmed', 'deaths']:.3f}
+        if len(df_filtered) > 0:
+            # Preparar datos para correlación
+            correlation_data = df_filtered.groupby('date').agg({
+                'confirmed': 'sum',
+                'deaths': 'sum',
+                'recovered': 'sum',
+                'active_cases': 'sum'
+            })
             
-            Una correlación alta indica que el aumento de casos confirmados 
-            está fuertemente asociado con el aumento de fallecidos.
-            """)
-        
-        with col2:
-            st.info(f"""
-            **Correlación Confirmados-Activos:** {corr_matrix.loc['confirmed', 'active_cases']:.3f}
-            
-            Muestra la relación entre casos totales y casos activos actuales.
-            """)
+            # Calcular matriz de correlación
+            if len(correlation_data) > 1:
+                corr_matrix = correlation_data.corr()
+                
+                # Crear heatmap
+                fig3 = px.imshow(
+                    corr_matrix,
+                    labels=dict(color="Correlación"),
+                    x=['Confirmados', 'Fallecidos', 'Recuperados', 'Activos'],
+                    y=['Confirmados', 'Fallecidos', 'Recuperados', 'Activos'],
+                    color_continuous_scale='RdBu_r',
+                    aspect='auto',
+                    title='Matriz de Correlación entre Variables',
+                    text_auto='.2f'
+                )
+                
+                fig3.update_layout(height=500, template='plotly_white')
+                
+                st.plotly_chart(fig3, use_container_width=True)
+                
+                # Análisis de correlaciones
+                st.markdown("### Análisis de Correlaciones")
+                
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    st.success(f"""
+                    **Correlación Confirmados-Fallecidos:** {corr_matrix.loc['confirmed', 'deaths']:.3f}
+                    
+                    Una correlación alta indica que el aumento de casos confirmados 
+                    está fuertemente asociado con el aumento de fallecidos.
+                    """)
+                
+                with col2:
+                    st.info(f"""
+                    **Correlación Confirmados-Activos:** {corr_matrix.loc['confirmed', 'active_cases']:.3f}
+                    
+                    Muestra la relación entre casos totales y casos activos actuales.
+                    """)
+            else:
+                st.info("No hay suficientes datos para calcular correlaciones.")
+        else:
+            st.warning("No hay datos disponibles para mostrar correlaciones.")
     
     with tab4:
         st.subheader("Análisis Avanzado - Tendencias y Crecimiento")
         
-        # Calcular tasa de crecimiento diaria
-        daily_data = df_filtered.groupby('date')['confirmed'].sum().reset_index()
-        daily_data['new_cases'] = daily_data['confirmed'].diff().fillna(0)
-        daily_data['growth_rate'] = (daily_data['new_cases'] / daily_data['confirmed'].shift(1) * 100).fillna(0)
-        
-        # Gráfico de nuevos casos diarios
-        fig4a = go.Figure()
-        
-        fig4a.add_trace(go.Bar(
-            x=daily_data['date'],
-            y=daily_data['new_cases'],
-            name='Nuevos Casos Diarios',
-            marker_color='indianred',
-            hovertemplate='<b>Fecha:</b> %{x}<br><b>Nuevos casos:</b> %{y:,}<extra></extra>'
-        ))
-        
-        fig4a.update_layout(
-            title='Nuevos Casos Diarios',
-            xaxis_title='Fecha',
-            yaxis_title='Nuevos Casos',
-            height=400,
-            template='plotly_white'
-        )
-        
-        st.plotly_chart(fig4a, use_container_width=True)
-        
-        # Tasa de crecimiento
-        st.markdown("### Tasa de Crecimiento")
-        
-        fig4b = go.Figure()
-        
-        fig4b.add_trace(go.Scatter(
-            x=daily_data['date'],
-            y=daily_data['growth_rate'],
-            mode='lines',
-            name='Tasa de Crecimiento',
-            line=dict(color='green', width=2),
-            fill='tozeroy',
-            hovertemplate='<b>Fecha:</b> %{x}<br><b>Tasa:</b> %{y:.2f}%<extra></extra>'
-        ))
-        
-        fig4b.update_layout(
-            title='Tasa de Crecimiento Diaria (%)',
-            xaxis_title='Fecha',
-            yaxis_title='Tasa de Crecimiento (%)',
-            height=400,
-            template='plotly_white'
-        )
-        
-        st.plotly_chart(fig4b, use_container_width=True)
-        
-        # Detección de rebrotes
-        st.markdown("### Detección de Rebrotes")
-        
-        # Identificar días con crecimiento significativo
-        threshold = daily_data['growth_rate'].quantile(0.9)
-        rebrotes = daily_data[daily_data['growth_rate'] > threshold].tail(10)
-        
-        if len(rebrotes) > 0:
-            st.warning(f"Se detectaron **{len(rebrotes)}** días con crecimiento superior al percentil 90 ({threshold:.2f}%)")
-            st.dataframe(
-                rebrotes[['date', 'new_cases', 'growth_rate']].rename(columns={
-                    'date': 'Fecha',
-                    'new_cases': 'Nuevos Casos',
-                    'growth_rate': 'Tasa de Crecimiento (%)'
-                }).tail(5),
-                use_container_width=True
+        if len(df_filtered) > 0:
+            # Calcular tasa de crecimiento diaria
+            daily_data = df_filtered.groupby('date')['confirmed'].sum().reset_index()
+            daily_data['new_cases'] = daily_data['confirmed'].diff().fillna(0)
+            daily_data['growth_rate'] = (daily_data['new_cases'] / daily_data['confirmed'].shift(1) * 100).fillna(0)
+            
+            # Gráfico de nuevos casos diarios
+            fig4a = go.Figure()
+            
+            fig4a.add_trace(go.Bar(
+                x=daily_data['date'],
+                y=daily_data['new_cases'],
+                name='Nuevos Casos Diarios',
+                marker_color='indianred',
+                hovertemplate='<b>Fecha:</b> %{x}<br><b>Nuevos casos:</b> %{y:,}<extra></extra>'
+            ))
+            
+            fig4a.update_layout(
+                title='Nuevos Casos Diarios',
+                xaxis_title='Fecha',
+                yaxis_title='Nuevos Casos',
+                height=400,
+                template='plotly_white'
             )
+            
+            st.plotly_chart(fig4a, use_container_width=True)
+            
+            # Tasa de crecimiento
+            st.markdown("### Tasa de Crecimiento")
+            
+            fig4b = go.Figure()
+            
+            fig4b.add_trace(go.Scatter(
+                x=daily_data['date'],
+                y=daily_data['growth_rate'],
+                mode='lines',
+                name='Tasa de Crecimiento',
+                line=dict(color='green', width=2),
+                fill='tozeroy',
+                hovertemplate='<b>Fecha:</b> %{x}<br><b>Tasa:</b> %{y:.2f}%<extra></extra>'
+            ))
+            
+            fig4b.update_layout(
+                title='Tasa de Crecimiento Diaria (%)',
+                xaxis_title='Fecha',
+                yaxis_title='Tasa de Crecimiento (%)',
+                height=400,
+                template='plotly_white'
+            )
+            
+            st.plotly_chart(fig4b, use_container_width=True)
+            
+            # Detección de rebrotes
+            st.markdown("### Detección de Rebrotes")
+            
+            if len(daily_data) > 10:
+                # Identificar días con crecimiento significativo
+                threshold = daily_data['growth_rate'].quantile(0.9)
+                rebrotes = daily_data[daily_data['growth_rate'] > threshold].tail(10)
+                
+                if len(rebrotes) > 0:
+                    st.warning(f"Se detectaron **{len(rebrotes)}** días con crecimiento superior al percentil 90 ({threshold:.2f}%)")
+                    st.dataframe(
+                        rebrotes[['date', 'new_cases', 'growth_rate']].rename(columns={
+                            'date': 'Fecha',
+                            'new_cases': 'Nuevos Casos',
+                            'growth_rate': 'Tasa de Crecimiento (%)'
+                        }).tail(5),
+                        use_container_width=True
+                    )
+                else:
+                    st.success("No se detectaron rebrotes significativos en el período seleccionado.")
+            else:
+                st.info("No hay suficientes datos para detectar rebrotes.")
         else:
-            st.success("No se detectaron rebrotes significativos en el período seleccionado.")
+            st.warning("No hay datos disponibles para el análisis avanzado.")
 
     
     # ============================================================================
@@ -568,17 +600,23 @@ if data_loaded:
     with col1:
         st.subheader("Top 5 Países Afectados")
         
-        top5_countries = df_filtered.groupby('country_region')['confirmed'].max().nlargest(5)
-        
-        for i, (country, cases) in enumerate(top5_countries.items(), 1):
-            st.write(f"**{i}.** {country}: **{cases:,}** casos")
+        if len(df_filtered) > 0:
+            top5_countries = df_filtered.groupby('country_region')['confirmed'].max().nlargest(5)
+            
+            for i, (country, cases) in enumerate(top5_countries.items(), 1):
+                st.write(f"**{i}.** {country}: **{cases:,}** casos")
+        else:
+            st.write("No hay datos disponibles.")
     
     with col2:
         st.subheader("Estadísticas Generales")
         
         total_countries = df_filtered['country_region'].nunique()
         total_days = df_filtered['date'].nunique()
-        avg_cases_per_day = int(df_filtered.groupby('date')['confirmed'].sum().mean())
+        if len(df_filtered) > 0 and total_days > 0:
+            avg_cases_per_day = int(df_filtered.groupby('date')['confirmed'].sum().mean())
+        else:
+            avg_cases_per_day = 0
         
         st.write(f"**Países analizados:** {total_countries}")
         st.write(f"**Días analizados:** {total_days}")
@@ -606,14 +644,20 @@ if data_loaded:
         
         # Países con mayor crecimiento reciente
         st.write("**Mayor crecimiento:**")
-        country_growth = df_filtered.groupby('country_region')['confirmed'].agg(['first', 'last'])
-        country_growth['growth'] = ((country_growth['last'] - country_growth['first']) / country_growth['first'] * 100).fillna(0)
-        top_growth = country_growth.nlargest(3, 'growth')
-        
-        for country in top_growth.index:
-            growth = top_growth.loc[country, 'growth']
-            if growth > 0:
-                st.write(f"• {country}: +{growth:.1f}%")
+        if len(df_filtered) > 0:
+            country_growth = df_filtered.groupby('country_region')['confirmed'].agg(['first', 'last'])
+            country_growth['growth'] = ((country_growth['last'] - country_growth['first']) / country_growth['first'] * 100).fillna(0)
+            top_growth = country_growth.nlargest(3, 'growth')
+            
+            if len(top_growth) > 0:
+                for country in top_growth.index:
+                    growth = top_growth.loc[country, 'growth']
+                    if growth > 0:
+                        st.write(f"• {country}: +{growth:.1f}%")
+            else:
+                st.write("Sin datos suficientes.")
+        else:
+            st.write("Sin datos suficientes.")
 
     
     # ============================================================================
