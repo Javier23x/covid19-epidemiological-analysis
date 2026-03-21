@@ -9,11 +9,6 @@
 
 Este proyecto realiza un análisis exhaustivo de datos epidemiológicos de COVID-19 utilizando los datos oficiales de Johns Hopkins University (JHU CSSE). El análisis incluye limpieza de datos, análisis exploratorio, visualizaciones avanzadas y un dashboard interactivo desarrollado con Streamlit para la exploración de tendencias globales.
 
-**Universidad Católica de la Santísima Concepción**  
-**Curso:** Gestión de Datos 2025-II  
-**Profesor:** Lorenzo Paredes Grandón  
-**Autores:** Javier Pino Herrera, Camilo Campos González
-
 ## Objetivos del Proyecto
 
 - Procesar y limpiar grandes volúmenes de datos epidemiológicos (710 archivos CSV)
@@ -420,30 +415,6 @@ sys.path.insert(0, os.path.join('..', 'src'))
 from config import *
 ```
 
-## Contribuciones
-
-Este proyecto fue desarrollado como parte del curso de Gestión de Datos. Para sugerencias o mejoras:
-
-1. Fork el repositorio
-2. Crea una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit tus cambios (`git commit -m 'feat: agregar nueva funcionalidad'`)
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Abre un Pull Request
-
-## Autores
-
-**Javier Pino Herrera**  
-**Camilo Campos González**
-
-Universidad Católica de la Santísima Concepción  
-Ingeniería Civil Informática  
-Gestión de Datos 2025-II
-
-## Profesor
-
-**Lorenzo Paredes Grandón**  
-Universidad Católica de la Santísima Concepción
-
 ## Licencia
 
 Este proyecto está bajo la Licencia MIT. Consultar el archivo [LICENSE](LICENSE) para más detalles.
@@ -453,14 +424,6 @@ Este proyecto está bajo la Licencia MIT. Consultar el archivo [LICENSE](LICENSE
 - **Johns Hopkins University CSSE** por proporcionar los datos epidemiológicos
 - **Universidad Católica de la Santísima Concepción** por el apoyo académico
 - **Profesor Lorenzo Paredes Grandón** por la guía y orientación durante el proyecto
-
-## Contacto
-
-Para consultas sobre el proyecto:
-
-- **Repositorio:** [https://github.com/Javier23x/covid19-epidemiological-analysis](https://github.com/Javier23x/covid19-epidemiological-analysis)
-- **Issues:** Para reportar problemas o sugerencias
-- **Email:** A través de GitHub
 
 ---
 
